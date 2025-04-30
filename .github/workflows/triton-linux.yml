@@ -22,4 +22,4 @@ jobs:
           cd triton
 
           pip install -r python/requirements.txt
-          python setup.py bdist_wheel
+          MAX_JOBS=2 python setup.py bdist_wheel
