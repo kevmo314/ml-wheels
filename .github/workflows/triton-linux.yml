@@ -23,3 +23,9 @@ jobs:
 
           pip install -r python/requirements.txt
           MAX_JOBS=2 python setup.py bdist_wheel
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: triton-wheel
+          path: |
+            triton/dist/*.whl
