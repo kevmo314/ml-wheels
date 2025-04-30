@@ -20,5 +20,5 @@ jobs:
       - run: |
           git clone https://github.com/Dao-AILab/flash-attention
           cd flash-attention/hopper
-          pip install ninja
+          pip install ninja packaging
           python setup.py bdist_wheel
