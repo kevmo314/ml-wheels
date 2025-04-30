@@ -1,0 +1,24 @@
+name: github.com/Dao-AILab/flash-attention
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        version: [main]
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          git clone https://github.com/Dao-AILab/flash-attention
+          cd flash-attention/hopper
+          pip install ninja
+          python setup.py bdist_wheel
