@@ -1,0 +1,25 @@
+name: github.com/triton-lang/triton
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        version: [v2.1.0, v2.0.0, v1.1.2, v1.1.1, v1.1, v1.0]
+        os: [ubuntu-24.04, windows-2025, ubuntu-24.04-arm, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          git clone https://github.com/triton-lang/triton
+          cd triton
+
+          pip install -r python/requirements.txt
+          python setup.py bdist_wheel
