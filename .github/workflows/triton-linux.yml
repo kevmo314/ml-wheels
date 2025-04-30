@@ -10,8 +10,8 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [v2.1.0, v2.0.0, v1.1.2, v1.1.1, v1.1, v1.0]
-        os: [ubuntu-24.04, windows-2025, ubuntu-24.04-arm, windows-11-arm]
+        version: [release/2.0.x, release/2.1.x, release/2.2.x, release/2.3.x, release/3.0.x, release/3.1.x, release/3.2.x, release/3.3.x]
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/setup-python@v5
