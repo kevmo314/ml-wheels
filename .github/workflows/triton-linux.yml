@@ -22,6 +22,7 @@ jobs:
           cd triton
 
           pip install ninja cmake setuptools wheel pybind11 lit
+          cd python
           MAX_JOBS=2 python setup.py bdist_wheel
       - name: Upload artifact
         uses: actions/upload-artifact@v4
