@@ -21,4 +21,10 @@ jobs:
           git clone https://github.com/Dao-AILab/flash-attention
           cd flash-attention/hopper
           pip install ninja packaging
-          python setup.py bdist_wheel
+          MAX_JOBS=2 python setup.py bdist_wheel
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flash-attention-${{ matrix.os }}-${{ matrix.version }}
+          path: |
+            flash-attention/hopper/dist/*.whl
