@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [2.0.x, 2.1.x, 2.2.x, 2.3.x, 3.0.x, 3.1.x, 3.2.x, 3.3.x]
+        version: [3.0.x, 3.1.x, 3.2.x, 3.3.x]
         os: [ubuntu-24.04, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     steps:
