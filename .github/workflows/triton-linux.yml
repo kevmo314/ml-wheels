@@ -21,7 +21,7 @@ jobs:
           git clone -b release/${{ matrix.version }} https://github.com/triton-lang/triton
           cd triton
 
-          pip install -r python/requirements.txt
+          pip install ninja cmake setuptools wheel pybind11, lit
           MAX_JOBS=2 python setup.py bdist_wheel
       - name: Upload artifact
         uses: actions/upload-artifact@v4
