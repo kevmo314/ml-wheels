@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: '3.13'
       - uses: Jimver/cuda-toolkit@master
+        with:
+          use-local-cache: false
       - run: |
           git clone https://github.com/Dao-AILab/flash-attention
           cd flash-attention/hopper
