@@ -28,6 +28,7 @@ jobs:
           sudo dpkg -i cuda-keyring_1.1-1_all.deb
           sudo apt-get update
           sudo apt-get -y install cuda-toolkit-12-8
+          sudo apt-get clean
       - name: Install CUDA Toolkit (Ubuntu arm64)
         if: matrix.os == 'ubuntu-24.04-arm'
         run: |
@@ -35,6 +36,7 @@ jobs:
           sudo dpkg -i cuda-keyring_1.1-1_all.deb
           sudo apt-get update
           sudo apt-get -y install cuda-toolkit-12-8
+          sudo apt-get clean
       - run: |
           git clone https://github.com/Dao-AILab/flash-attention
           cd flash-attention/hopper
