@@ -33,4 +33,4 @@ jobs:
         with:
           name: triton-${{ matrix.os }}-${{ matrix.version }}
           path: |
-            triton/dist/*.whl
+            triton/python/dist/*.whl
