@@ -19,8 +19,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/setup-python@v5
+        if: matrix.os == 'x64'
         with:
           python-version: "3.13"
+          architecture: "x64"
+      - uses: actions/setup-python@v5
+        if: matrix.os == 'ARM64'
+        with:
+          python-version: "3.13"
+          architecture: "arm64"
       - name: Install CUDA Toolkit (Ubuntu x86-64)
         if: matrix.os == 'X64'
         run: |
