@@ -11,61 +11,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_linux_x64:
+  build:
     strategy:
       matrix:
         version: [main]
-    runs-on: [self-hosted, linux, X64]
+        platform: [amd64, arm64]
+    runs-on: [self-hosted, linux]
     steps:
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          architecture: "x64"
-      - name: Install CUDA Toolkit (Ubuntu x86-64)
-        run: |
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
-          sudo dpkg -i cuda-keyring_1.1-1_all.deb
-          sudo apt-get update
-          sudo apt-get -y install cuda-toolkit-12-8
-          sudo apt-get clean
+      - uses: actions/checkout@v4
+      - uses: docker/setup-docker-action@v4
       - run: |
-          git clone https://github.com/Dao-AILab/flash-attention
-          cd flash-attention/hopper
-          pip install ninja packaging setuptools
-          pip install torch --index-url https://download.pytorch.org/whl/cu128
-          MAX_JOBS=4 python setup.py bdist_wheel
+           docker build --platform=linux/${{ matrix.platform }} -f Dockerfile.flash-attn-3 -o type=local,dest=dist .
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flash-attention-x64-${{ matrix.version }}
+          name: flash-attention-${{ matrix.platform }}-${{ matrix.version }}
           path: |
-            flash-attention/hopper/dist/*.whl
-  build_linux_arm64:
-    strategy:
-      matrix:
-        version: [main]
-    runs-on: [self-hosted, linux, ARM64]
-    steps:
-      - uses: actions/setup-python@v5
+            dist/*.whl
+      - uses: ryand56/r2-upload-action@latest
         with:
-          python-version: "3.13"
-          architecture: "arm64"
-      - name: Install CUDA Toolkit (Ubuntu arm64)
-        run: |
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbsa/cuda-keyring_1.1-1_all.deb
-          sudo dpkg -i cuda-keyring_1.1-1_all.deb
-          sudo apt-get update
-          sudo apt-get -y install cuda-toolkit-12-8
-          sudo apt-get clean
-      - run: |
-          git clone https://github.com/Dao-AILab/flash-attention
-          cd flash-attention/hopper
-          pip install ninja packaging setuptools
-          pip install torch --index-url https://download.pytorch.org/whl/cu128
-          MAX_JOBS=4 python setup.py bdist_wheel
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: flash-attention-arm64-${{ matrix.version }}
-          path: |
-            flash-attention/hopper/dist/*.whl
+          r2-account-id: 9c8055ce7e6e388a6e58e66249df0e27
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ml-wheels
+          source-dir: dist
+          destination-dir: ./

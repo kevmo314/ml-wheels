@@ -15,45 +15,24 @@ jobs:
     strategy:
       matrix:
         version: [v2.7.4.post1, v2.7.4, v2.7.3, v2.7.2, v2.7.2.post1]
-        os: [X64, ARM64]
-    runs-on: ${{ matrix.os }}
+        platform: [amd64, arm64]
+    runs-on: [self-hosted, linux]
     steps:
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Install CUDA Toolkit (Ubuntu x86-64)
-        if: matrix.os == 'X64'
-        run: |
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
-          sudo dpkg -i cuda-keyring_1.1-1_all.deb
-          sudo apt-get update
-          sudo apt-get -y install cuda-toolkit-12-8
-          sudo apt-get clean
-      - name: Install CUDA Toolkit (Ubuntu arm64)
-        if: matrix.os == 'ARM64'
-        run: |
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbsa/cuda-keyring_1.1-1_all.deb
-          sudo dpkg -i cuda-keyring_1.1-1_all.deb
-          sudo apt-get update
-          sudo apt-get -y install cuda-toolkit-12-8
-          sudo apt-get clean
+      - uses: actions/checkout@v4
+      - uses: docker/setup-docker-action@v4
       - run: |
-          git clone https://github.com/Dao-AILab/flash-attention
-          cd flash-attention
-          pip install ninja packaging setuptools numpy
-          pip install torch --index-url https://download.pytorch.org/whl/cu128
-          MAX_JOBS=4 python setup.py bdist_wheel
+           docker build --platform=linux/${{ matrix.platform }} -f Dockerfile.flash-attn -o type=local,dest=dist .
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flash-attention-${{ matrix.os }}-${{ matrix.version }}
+          name: flash-attention-${{ matrix.platform }}-${{ matrix.version }}
           path: |
-            flash-attention/dist/*.whl
+            dist/*.whl
       - uses: ryand56/r2-upload-action@latest
         with:
           r2-account-id: 9c8055ce7e6e388a6e58e66249df0e27
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ml-wheels
-          source-dir: flash-attention/dist
+          source-dir: dist
           destination-dir: ./
