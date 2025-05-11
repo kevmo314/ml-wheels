@@ -1,4 +1,4 @@
-name: github.com/Dao-AILab/flash-attention
+name: github.com/Dao-AILab/flash-attention/hopper
 on:
   push:
     branches: [ "main" ]
