@@ -36,3 +36,11 @@ jobs:
           name: triton-${{ matrix.os }}-${{ matrix.version }}
           path: |
             triton/python/dist/*.whl
+      - uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: 9c8055ce7e6e388a6e58e66249df0e27
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ml-wheels
+          source-dir: triton/python/dist
+          destination-dir: ./
