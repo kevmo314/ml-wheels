@@ -46,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flash-attention-${{ matrix-os }}-${{ matrix.version }}
+          name: flash-attention-${{ matrix.os }}-${{ matrix.version }}
           path: |
             flash-attention/dist/*.whl
       - uses: ryand56/r2-upload-action@latest
