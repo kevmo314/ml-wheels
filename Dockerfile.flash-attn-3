@@ -1,6 +1,8 @@
 FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04 AS build
 
 ARG VERSION=98edb0d29bb1db336fef845fb5fd49bc98b04b96
+ARG MAX_JOBS=16
+ENV MAX_JOBS=${MAX_JOBS}
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -20,7 +22,7 @@ RUN python3 -m venv /opt/venv && \
     git clone https://github.com/Dao-AILab/flash-attention && \
     cd flash-attention/hopper && \
     git checkout ${VERSION} && \
-    MAX_JOBS=16 python3 setup.py bdist_wheel
+    python3 setup.py bdist_wheel
 
 FROM scratch
 

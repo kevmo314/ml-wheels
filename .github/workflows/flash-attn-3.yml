@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: docker/setup-docker-action@v4
       - run: |
-           docker build --platform=linux/${{ matrix.platform }} -f Dockerfile.flash-attn-3 -o type=local,dest=dist .
+           docker build --build-arg VERSION=${{ matrix.version }} --build-arg MAX_JOBS=2 --platform=linux/${{ matrix.platform }} -f Dockerfile.flash-attn-3 -o type=local,dest=dist .
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
