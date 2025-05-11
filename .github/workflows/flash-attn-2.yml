@@ -30,7 +30,7 @@ jobs:
           sudo apt-get clean
       - run: |
           git clone https://github.com/Dao-AILab/flash-attention
-          cd flash-attention/hopper
+          cd flash-attention
           pip install ninja packaging setuptools numpy
           pip install torch --index-url https://download.pytorch.org/whl/cu128
           MAX_JOBS=4 python setup.py bdist_wheel
