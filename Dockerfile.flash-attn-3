@@ -1,8 +1,7 @@
-FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04 AS build
+FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04 AS build
 
-ARG VERSION=98edb0d29bb1db336fef845fb5fd49bc98b04b96
-ARG MAX_JOBS=16
-ENV MAX_JOBS=${MAX_JOBS}
+ARG VERSION=d82bbf26924c492064af8b27ab299ff4808d1bf6
+ARG MAX_JOBS=24
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -13,6 +12,8 @@ RUN apt-get update && \
     python3-venv \
     python3-pip && \
     rm -rf /var/lib/apt/lists/*
+
+ENV MAX_JOBS=${MAX_JOBS}
 
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \

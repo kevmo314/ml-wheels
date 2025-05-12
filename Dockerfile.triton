@@ -1,6 +1,6 @@
 FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04 AS build
 
-ARG VERSION=v2.7.4.post1
+ARG VERSION=3.3.x
 ARG MAX_JOBS=16
 
 RUN apt-get update && \
@@ -18,13 +18,13 @@ ENV MAX_JOBS=${MAX_JOBS}
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir ninja packaging numpy && \
-    pip install torch --index-url https://download.pytorch.org/whl/cu128 && \
-    git clone https://github.com/Dao-AILab/flash-attention && \
-    cd flash-attention && \
-    git checkout ${VERSION} && \
+    pip install --no-cache-dir ninja cmake setuptools wheel pybind11 lit && \
+    git clone https://github.com/triton-lang/triton && \
+    cd triton && \
+    git checkout release/${VERSION} && \
+    cd python && \
     python3 setup.py bdist_wheel
 
 FROM scratch
 
-COPY --from=build /flash-attention/dist/* .
+COPY --from=build /triton/python/dist/* .
