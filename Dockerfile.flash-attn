@@ -1,6 +1,6 @@
 FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04 AS build
 
-ARG VERSION=v2.7.4.post1
+ARG VERSION=v2.8.0.post2
 ARG MAX_JOBS=16
 
 RUN apt-get update && \
