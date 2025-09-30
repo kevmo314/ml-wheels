@@ -1,6 +1,6 @@
-FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04 AS build
+FROM nvidia/cuda:12.9.1-cudnn-devel-ubuntu24.04 AS build
 
-ARG VERSION=v2.8.0.post2
+ARG VERSION=v2.8.3
 ARG MAX_JOBS=16
 
 RUN apt-get update && \
@@ -19,7 +19,7 @@ RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir ninja packaging numpy && \
-    pip install torch --index-url https://download.pytorch.org/whl/cu128 && \
+    pip install torch --index-url https://download.pytorch.org/whl/cu129 && \
     git clone https://github.com/Dao-AILab/flash-attention && \
     cd flash-attention && \
     git checkout ${VERSION} && \
