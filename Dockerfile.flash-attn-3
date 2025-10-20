@@ -1,7 +1,7 @@
 FROM nvidia/cuda:13.0.0-cudnn-devel-ubuntu24.04 AS build
 
-ARG VERSION=5059fd53e602bcc00336bb5cc8a85e50940485cb
-ARG MAX_JOBS=20
+ARG VERSION=91f14ca07b792645b72efbb05b233907a831c898
+ARG MAX_JOBS=16
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
