@@ -23,7 +23,9 @@ RUN python3 -m venv /opt/venv && \
     git clone https://github.com/Dao-AILab/flash-attention && \
     cd flash-attention/hopper && \
     git checkout ${VERSION} && \
-    python3 setup.py bdist_wheel
+    sed -i '/if bare_metal_version < Version("12.3"):/,/raise RuntimeError/c\    if bare_metal_version < Version("12.3"):\n        raise RuntimeError("FlashAttention-3 is only supported on CUDA 12.3 and above")\n    elif bare_metal_version >= Version("13.0"):\n        pass  # CUDA 13.0+ uses system nvcc' setup.py && \
+    sed -i 's/if bare_metal_version != Version("12.8"):/if bare_metal_version >= Version("12.3") and bare_metal_version < Version("13.0") and bare_metal_version != Version("12.8"):/' setup.py && \
+    CPLUS_INCLUDE_PATH=/usr/local/cuda/include/cccl C_INCLUDE_PATH=/usr/local/cuda/include/cccl python3 setup.py bdist_wheel
 
 FROM scratch
 
