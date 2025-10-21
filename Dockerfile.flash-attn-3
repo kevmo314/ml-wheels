@@ -19,7 +19,7 @@ RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir ninja packaging numpy && \
-    pip install torch --index-url https://download.pytorch.org/whl/cu130 && \
+    pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cu130 && \
     git clone https://github.com/Dao-AILab/flash-attention && \
     cd flash-attention/hopper && \
     git checkout ${VERSION} && \
