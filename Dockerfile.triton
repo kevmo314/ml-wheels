@@ -1,6 +1,6 @@
 FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04 AS build
 
-ARG VERSION=3.3.x
+ARG VERSION=v3.4.0
 ARG MAX_JOBS=16
 
 RUN apt-get update && \
@@ -21,7 +21,7 @@ RUN python3 -m venv /opt/venv && \
     pip install --no-cache-dir ninja cmake setuptools wheel pybind11 lit && \
     git clone https://github.com/triton-lang/triton && \
     cd triton && \
-    git checkout release/${VERSION} && \
+    git checkout ${VERSION} && \
     cd python && \
     python3 setup.py bdist_wheel
 

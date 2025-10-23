@@ -1,7 +1,7 @@
-FROM nvidia/cuda:13.0.0-cudnn-devel-ubuntu24.04 AS build
+FROM nvidia/cuda:13.0.1-cudnn-devel-ubuntu24.04 AS build
 
-ARG VERSION=91f14ca07b792645b72efbb05b233907a831c898
-ARG MAX_JOBS=16
+ARG VERSION=stream-fix
+ARG MAX_JOBS=64
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -20,12 +20,10 @@ RUN python3 -m venv /opt/venv && \
     pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir ninja packaging numpy && \
     pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cu130 && \
-    git clone https://github.com/Dao-AILab/flash-attention && \
+    git clone https://github.com/kevmo314/flash-attention && \
     cd flash-attention/hopper && \
     git checkout ${VERSION} && \
-    sed -i '/if bare_metal_version < Version("12.3"):/,/raise RuntimeError/c\    if bare_metal_version < Version("12.3"):\n        raise RuntimeError("FlashAttention-3 is only supported on CUDA 12.3 and above")\n    elif bare_metal_version >= Version("13.0"):\n        pass  # CUDA 13.0+ uses system nvcc' setup.py && \
-    sed -i 's/if bare_metal_version != Version("12.8"):/if bare_metal_version >= Version("12.3") and bare_metal_version < Version("13.0") and bare_metal_version != Version("12.8"):/' setup.py && \
-    CPLUS_INCLUDE_PATH=/usr/local/cuda/include/cccl C_INCLUDE_PATH=/usr/local/cuda/include/cccl python3 setup.py bdist_wheel
+    python3 setup.py bdist_wheel
 
 FROM scratch
 

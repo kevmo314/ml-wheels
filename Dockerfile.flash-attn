@@ -1,4 +1,4 @@
-FROM nvidia/cuda:13.0.0-cudnn-devel-ubuntu24.04 AS build
+FROM nvidia/cuda:13.0.1-cudnn-devel-ubuntu24.04 AS build
 
 ARG VERSION=v2.8.3
 ARG MAX_JOBS=16
